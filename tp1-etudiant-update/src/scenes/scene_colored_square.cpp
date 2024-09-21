@@ -5,11 +5,10 @@ using namespace std;
 
 SceneColoredSquare::SceneColoredSquare(Resources &res)
     : Scene(res),
-      m_coloredSquareBuffer(GL_ARRAY_BUFFER, sizeof(colorSquareVertices), squareVertices, GL_STATIC_DRAW),
+      m_coloredSquareBuffer(GL_ARRAY_BUFFER, sizeof(colorSquareVertices), colorSquareVertices, GL_STATIC_DRAW),
       m_coloredSquareVao(),
       m_coloredSquareDraw(m_coloredSquareVao, 6)
 {
-    // TODO
     m_coloredSquareVao.bind();
     m_coloredSquareBuffer.bind();
     m_coloredSquareVao.specifyAttribute(m_coloredSquareBuffer, 0, 3, 6 * sizeof(float), 0);
@@ -19,7 +18,6 @@ SceneColoredSquare::SceneColoredSquare(Resources &res)
 
 void SceneColoredSquare::run(Window &w)
 {
-    // TODO
     m_resources.color.use();
     // m_coloredSquareVao.bind();
     m_coloredSquareDraw.draw();

@@ -4,7 +4,7 @@
 const GLfloat triVertices[] = {
     0.0f, 0.5f, 0.0f,
     -0.5f, -0.5f, 0.0f,
-    0.5f, -0.5f, 0.0f
+    0.5f, -0.5f, 0.0f,
 };
 
 const GLfloat squareVertices[] = {
@@ -14,25 +14,26 @@ const GLfloat squareVertices[] = {
 
     0.5f, 0.5f, 0.0f,
     -0.5f, -0.5f, 0.0f,
-    0.5f, -0.5f, 0.0f
+    0.5f, -0.5f, 0.0f,
+
 };
+
 const GLfloat colorTriVertices[] = {
-    // Positions         // Couleurs
-    -0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f, // Bas gauche, rouge
-     0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f, // Bas droite, vert
-     0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f  // Haut, bleu
+    -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 0.0f,
+     0.5f, -0.5f,  0.0f, 0.0f, 1.0f, 0.0f,
+     0.0f,  0.5f,  0.0f, 0.0f, 0.0f, 1.0f,
 };
 
 const GLfloat colorSquareVertices[] = {
-    // Positions          // Couleurs
-    -0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,  // Coin supérieur gauche (rouge)
-    -0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,  // Coin inférieur gauche (vert)
-     0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f,  // Coin supérieur droit (bleu)
-     
-     0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f,  // Coin supérieur droit (bleu)
-    -0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,  // Coin inférieur gauche (vert)
-     0.5f, -0.5f, 0.0f,   1.0f, 1.0f, 0.0f   // Coin inférieur droit (jaune)
+    -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, //haut gauche bleu
+    -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, //bas gauche rouge
+    0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, //bas droit vert
+
+    -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f,  //haut gauche bleu
+    0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, //bas droit vert
+    0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, //haut droit rouge
 };
+
 
 const GLfloat colorSquareVerticesReduced[] = {
     -0.5f, 0.5f,  0.0f, 0.0f, 0.0f, 1.0f,
