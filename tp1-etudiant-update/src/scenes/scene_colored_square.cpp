@@ -11,9 +11,8 @@ SceneColoredSquare::SceneColoredSquare(Resources &res)
 {
     m_coloredSquareVao.bind();
     m_coloredSquareBuffer.bind();
-    m_coloredSquareVao.specifyAttribute(m_coloredSquareBuffer, 0, 3, 6 * sizeof(float), 0);
-    m_coloredSquareVao.specifyAttribute(m_coloredSquareBuffer, 1, 3, 6 * sizeof(float), 3 * sizeof(float));
-    cout << "Colored square created" << endl;
+    m_coloredSquareVao.specifyAttribute(m_coloredSquareBuffer, 0, 3, 6, 0);
+    m_coloredSquareVao.specifyAttribute(m_coloredSquareBuffer, 1, 3, 6, 3);
 }
 
 void SceneColoredSquare::run(Window &w)

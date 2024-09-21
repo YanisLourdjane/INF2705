@@ -9,17 +9,11 @@ SceneSquare::SceneSquare(Resources& res)
     m_squareVao(),
     m_squareDraw(m_squareVao, 6)
 {
-    // TODO
-        m_squareVao.specifyAttribute(m_squareBuffer, 0, 3, 3 * sizeof(float), 0);
-        cout << "Square created" << endl;
-
-        //Unbind
-        // m_squareVao.unbind();
+        m_squareVao.specifyAttribute(m_squareBuffer, 0, 3, 3, 0);
 }
 
 void SceneSquare::run(Window& w)
 {
-    // TODO
     m_resources.basic.use();
     m_squareVao.bind();
     m_squareDraw.draw();

@@ -33,6 +33,7 @@ void BufferObject::allocate(GLenum type, GLsizeiptr dataSize, const void* data, 
 {
     // TODO
     m_type = type;
+    bind();
     glBufferData(type, dataSize, data, usage);
 }
 
@@ -41,8 +42,6 @@ void BufferObject::update(GLsizeiptr dataSize, const void* data)
     // TODO
     bind();
     glBufferSubData(m_type, 0, dataSize, data);
-    // le 0 c est pour dire que je commence a partir du debut (offset)
-
 }
 
 void* BufferObject::mapBuffer()

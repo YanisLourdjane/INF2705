@@ -30,7 +30,6 @@ void VertexArrayObject::specifyAttribute(BufferObject& buffer, GLuint index, GLi
     // TODO
     bind();
     buffer.bind();
-    glVertexAttribPointer(index, size, GL_FLOAT, GL_FALSE, stride, (void*)offset);
+    glVertexAttribPointer(index, size, GL_FLOAT, GL_FALSE, stride*sizeof(GLfloat), (void*)(offset*sizeof(GLfloat)));
     glEnableVertexAttribArray(index);
-    // unbind(); // On unbind le VAO pour etre sur que le prochain VAO ne prenne pas les attributs de celui-ci
 }

@@ -9,8 +9,16 @@ SceneMultipleVbos::SceneMultipleVbos(Resources& res)
 , m_onlyColorTriVertices{ 1.0f, 0.0f, 0.0f,
                            1.0f, 0.0f, 0.0f,
                            1.0f, 0.0f, 0.0f }
+, m_coloredTrianglePositionBuffer(GL_ARRAY_BUFFER, sizeof(triVertices), triVertices, GL_DYNAMIC_DRAW)
+, m_coloredTriangleColorBuffer(GL_ARRAY_BUFFER, sizeof(m_onlyColorTriVertices), m_onlyColorTriVertices, GL_DYNAMIC_DRAW)
+, m_coloredTriangleMultipleVbosVao()
+, m_coloredTriangleMultipleVbosDraw(m_coloredTriangleMultipleVbosVao, 3)
 {
-    // TODO
+    m_coloredTriangleMultipleVbosVao.bind();
+    m_coloredTrianglePositionBuffer.bind();
+    m_coloredTriangleColorBuffer.bind();
+    m_coloredTriangleMultipleVbosVao.specifyAttribute(m_coloredTrianglePositionBuffer, 0, 3, 3, 0);
+    m_coloredTriangleMultipleVbosVao.specifyAttribute(m_coloredTriangleColorBuffer, 1, 3, 3, 0);
 }
 
 void SceneMultipleVbos::run(Window& w)
@@ -18,13 +26,14 @@ void SceneMultipleVbos::run(Window& w)
     changeRGB(&m_onlyColorTriVertices[0]);
     changeRGB(&m_onlyColorTriVertices[3]);
     changeRGB(&m_onlyColorTriVertices[6]);
-    // TODO mise a jour de la couleur
     
-    // TODO mise a jour de la position
-    //(Ligne en dessous Deja fournie avec erreur de posPtr) 
-    // changePos(posPtr, m_positionX, m_positionY, m_deltaX, m_deltaY);
+    m_coloredTriangleColorBuffer.update(sizeof(m_onlyColorTriVertices), m_onlyColorTriVertices);
+    m_resources.color.use();
+    GLfloat* posPtr = (GLfloat*)m_coloredTrianglePositionBuffer.mapBuffer();
+    changePos(posPtr, m_positionX, m_positionY, m_deltaX, m_deltaY);
+    m_coloredTrianglePositionBuffer.unmapBuffer();
 
-    // TODO dessin
+    m_coloredTriangleMultipleVbosDraw.draw();
 }
 
 
