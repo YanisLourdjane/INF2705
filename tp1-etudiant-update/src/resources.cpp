@@ -13,12 +13,12 @@ Resources::Resources()
 {
     initShaderProgram(basic, "shaders/basic.vs.glsl", "shaders/basic.fs.glsl");
     initShaderProgram(color, "shaders/color.vs.glsl", "shaders/color.fs.glsl");
-    initShaderProgram(transformColorAttrib, "shaders/transform_color_attrib.vs.glsl", "shaders/transform_color_attrib.fs.glsl");
-    initShaderProgram(transformSolidColor, "shaders/transform_solid_color.vs.glsl", "shaders/transform_solid_color.fs.glsl");
+    initShaderProgram(transformColorAttrib, "shaders/transform.vs.glsl", "shaders/transform.fs.glsl");
+    initShaderProgram(transformSolidColor, "shaders/transform.vs.glsl", "shaders/transform.fs.glsl");
 
     mvpLocationTransformColorAttrib = transformColorAttrib.getUniformLoc("MVP");
-    mvpLocationTransformSolidColor = transformSolidColor.getUniformLoc("MVP");
-    colorLocationTransformSolidColor = transformSolidColor.getUniformLoc("Color");
+    // mvpLocationTransformSolidColor = transformSolidColor.getUniformLoc("MVP");
+    // colorLocationTransformSolidColor = transformSolidColor.getUniformLoc("Color");
 }
 
 void Resources::initShaderProgram(ShaderProgram& program, const char* vertexSrcPath, const char* fragmentSrcPath)    

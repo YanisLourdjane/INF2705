@@ -10,10 +10,10 @@
 class SceneCube : public Scene
 {
 public:
-    SceneCube(Resources& res);
+    SceneCube(Resources &res);
 
-    virtual void run(Window& w);
-    
+    virtual void run(Window &w);
+
 private:
     float m_rotationAngleDegree;
 

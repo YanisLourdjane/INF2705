@@ -57,8 +57,9 @@ int main(int argc, char* argv[])
     
     // TODO - couleur de remplissage suite au nettoyage de l'écran
     //      - test de profondeur
-
-
+    glClearColor(0.0f, 0.0f, 0.2f, 1.0f);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
     
     const char* const SCENE_NAMES[] = {
         "First Triangle",
