@@ -18,6 +18,5 @@ SceneColoredSquare::SceneColoredSquare(Resources &res)
 void SceneColoredSquare::run(Window &w)
 {
     m_resources.color.use();
-    // m_coloredSquareVao.bind();
     m_coloredSquareDraw.draw();
 }

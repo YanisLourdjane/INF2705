@@ -15,7 +15,6 @@ SceneSquare::SceneSquare(Resources& res)
 void SceneSquare::run(Window& w)
 {
     m_resources.basic.use();
-    m_squareVao.bind();
     m_squareDraw.draw();
 }
 

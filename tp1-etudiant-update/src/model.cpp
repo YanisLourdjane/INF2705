@@ -1,51 +1,64 @@
 #include "model.h"
 #include "obj_loader.h"
 
-Model::Model(const char* path): m_drawcall(m_vao, 0, GL_UNSIGNED_INT)
+#include "model.h"
+#include "obj_loader.h"
+
+Model::Model(const char* path)
+    : m_vbo(GL_ARRAY_BUFFER, 0, nullptr, GL_DYNAMIC_DRAW)
+    , m_ebo(GL_ELEMENT_ARRAY_BUFFER, 0, nullptr, GL_DYNAMIC_DRAW)
+    , m_vao()
+    , m_drawcall(m_vao, 0, GL_UNSIGNED_INT)  // Default initialize it with valid params
 {
-	// TODO: A COMPRENDRE
-	std::vector<GLfloat> vertexData;
-	std::vector<GLuint> indices;
-	loadObj(path, vertexData, indices);
+    // Initialize the vectors to store vertex data and indices
+    std::vector<GLfloat> vertexData;
+    std::vector<GLuint> indices;
 
-	m_vbo = BufferObject(GL_ARRAY_BUFFER, vertexData.size() * sizeof(GLfloat), vertexData.data(), GL_STATIC_DRAW);
-	m_ebo = BufferObject(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
+    // Load vertex and index data from the .obj file
+    loadObj(path, vertexData, indices);
 
-	m_vao = VertexArrayObject();
-	m_vao.bind();
-	m_vbo.bind();
-	m_ebo.bind();
+    // Now that we have vertexData and indices, update the VBO and EBO
+    m_vbo.update(vertexData.size() * sizeof(GLfloat), vertexData.data());
+    m_ebo.update(indices.size() * sizeof(GLuint), indices.data());
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
-	glEnableVertexAttribArray(0);
+    // Initialize and bind the Vertex Array Object (VAO)
+    m_vao.bind();
 
-	m_drawcall.setCount(indices.size());
+    // Bind the Vertex Buffer Object (VBO) and Element Buffer Object (EBO)
+    m_vbo.bind();
+    m_ebo.bind();
+
+    // Define the vertex attribute pointer
+
+    m_vao.specifyAttribute(m_vbo, 0, 3, 0, 0);
+
+    // Use a custom method to set the count later
+    m_drawcall.setCount(indices.size());
 }
+
+
 
 void Model::loadObj(const char* path, std::vector<GLfloat>& vertexData, std::vector<GLuint>& indices)
 {
-	objl::Loader loader;
-	bool loadout = loader.LoadFile(path);
-	if (!loadout)
-	{
-		std::cout << "Unable to load model " << path << std::endl;
-		return;
-	}
+    objl::Loader loader;
+    bool loadout = loader.LoadFile(path);
+    if (!loadout)
+    {
+        std::cout << "Unable to load model " << path << std::endl;
+        return;
+    }
 
-	for (size_t i = 0; i < loader.LoadedVertices.size(); i++)
-	{
-		objl::Vector3 p = loader.LoadedVertices[i].Position;
-		vertexData.push_back(p.X);
-		vertexData.push_back(p.Y);
-		vertexData.push_back(p.Z);
-	}
-	indices = loader.LoadedIndices;
+    for (size_t i = 0; i < loader.LoadedVertices.size(); i++)
+    {
+        objl::Vector3 p = loader.LoadedVertices[i].Position;
+        vertexData.push_back(p.X);
+        vertexData.push_back(p.Y);
+        vertexData.push_back(p.Z);
+    }
+    indices = loader.LoadedIndices;
 }
 
 void Model::draw()
 {
-	// TODO
-	m_vao.bind();
-	m_drawcall.draw();
+    m_drawcall.draw();
 }
-

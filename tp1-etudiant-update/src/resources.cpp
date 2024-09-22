@@ -17,8 +17,8 @@ Resources::Resources()
     initShaderProgram(transformSolidColor, "shaders/transform.vs.glsl", "shaders/transform.fs.glsl");
 
     mvpLocationTransformColorAttrib = transformColorAttrib.getUniformLoc("MVP");
-    // mvpLocationTransformSolidColor = transformSolidColor.getUniformLoc("MVP");
-    // colorLocationTransformSolidColor = transformSolidColor.getUniformLoc("Color");
+    mvpLocationTransformSolidColor = transformSolidColor.getUniformLoc("MVP");
+    colorLocationTransformSolidColor = transformSolidColor.getUniformLoc("color");
 }
 
 void Resources::initShaderProgram(ShaderProgram& program, const char* vertexSrcPath, const char* fragmentSrcPath)    

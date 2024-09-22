@@ -25,7 +25,7 @@ SceneCube::SceneCube(Resources &res)
 void SceneCube::run(Window &w)
 {
     m_rotationAngleDegree += 0.5f;
-    // TODO
+    
     m_cubeVao.bind();
     m_cubeIndicesBuffer.bind();
     float aspectRatio = static_cast<float>(w.getWidth())/static_cast<float>(w.getHeight());

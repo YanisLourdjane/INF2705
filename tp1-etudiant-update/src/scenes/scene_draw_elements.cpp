@@ -18,7 +18,6 @@ SceneDrawElements::SceneDrawElements(Resources& res)
 void SceneDrawElements::run(Window& w)
 {
     m_resources.color.use();
-    m_coloredSquareReduceVao.bind();
     m_coloredSquareReduceDraw.draw();
 }
 

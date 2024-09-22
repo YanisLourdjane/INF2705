@@ -15,6 +15,5 @@ SceneTriangle::SceneTriangle(Resources &res)
 void SceneTriangle::run(Window &w)
 {
     m_resources.basic.use();
-    m_triangleVao.bind();
     m_triangleDraw.draw();
 }
