@@ -16,4 +16,5 @@ void SceneTriangle::run(Window &w)
 {
     m_resources.basic.use();
     m_triangleDraw.draw();
+    m_triangleVao.unbind();
 }

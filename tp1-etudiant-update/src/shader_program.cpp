@@ -5,41 +5,35 @@
 
 ShaderProgram::ShaderProgram()
 {
-    // TODO
     m_id = glCreateProgram();
 }
-    
+
 ShaderProgram::~ShaderProgram()
-{        
-    // TODO
+{
     glDeleteProgram(m_id);
 }
-    
+
 void ShaderProgram::use()
 {
-    // TODO
     glUseProgram(m_id);
 }
-    
-void ShaderProgram::attachShaderObject(ShaderObject& s)
-{        
-    // TODO
+
+void ShaderProgram::attachShaderObject(ShaderObject &s)
+{
     glAttachShader(m_id, s.id());
 }
-    
+
 void ShaderProgram::link()
 {
-    // TODO
     glLinkProgram(m_id);
     checkLinkingError();
 }
 
-GLint ShaderProgram::getUniformLoc(const char* name)
+GLint ShaderProgram::getUniformLoc(const char *name)
 {
-    // TODO
     return glGetUniformLocation(m_id, name);
 }
-    
+
 void ShaderProgram::checkLinkingError()
 {
     GLint success;

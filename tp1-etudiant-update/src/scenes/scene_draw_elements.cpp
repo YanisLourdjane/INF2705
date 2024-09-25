@@ -2,10 +2,10 @@
 
 #include "vertices_data.h"
 
-SceneDrawElements::SceneDrawElements(Resources& res)
-: Scene(res),
-    m_coloredSquareReduceVao(),
-    m_coloredSquareReduceDraw(m_coloredSquareReduceVao, 6)
+SceneDrawElements::SceneDrawElements(Resources &res)
+    : Scene(res),
+      m_coloredSquareReduceVao(),
+      m_coloredSquareReduceDraw(m_coloredSquareReduceVao, 6)
 {
     m_coloredSquareReduceVao.bind();
     m_resources.coloredSquareReduceBuffer.bind();
@@ -15,10 +15,9 @@ SceneDrawElements::SceneDrawElements(Resources& res)
     m_resources.coloredSquareReduceIndicesBuffer.bind();
 }
 
-void SceneDrawElements::run(Window& w)
+void SceneDrawElements::run(Window &w)
 {
     m_resources.color.use();
     m_coloredSquareReduceDraw.draw();
+    m_coloredSquareReduceVao.unbind();
 }
-
-

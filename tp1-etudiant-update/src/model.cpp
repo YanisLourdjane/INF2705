@@ -4,41 +4,31 @@
 #include "model.h"
 #include "obj_loader.h"
 
-Model::Model(const char* path)
-    : m_vbo(GL_ARRAY_BUFFER, 0, nullptr, GL_DYNAMIC_DRAW)
-    , m_ebo(GL_ELEMENT_ARRAY_BUFFER, 0, nullptr, GL_DYNAMIC_DRAW)
-    , m_vao()
-    , m_drawcall(m_vao, 0, GL_UNSIGNED_INT)  // Default initialize it with valid params
+Model::Model(const char *path)
+    : m_vbo(GL_ARRAY_BUFFER, 0, nullptr, GL_DYNAMIC_DRAW), 
+    m_ebo(GL_ELEMENT_ARRAY_BUFFER, 0, nullptr, GL_DYNAMIC_DRAW), 
+    m_vao(), 
+    m_drawcall(m_vao, 0, GL_UNSIGNED_INT)
 {
-    // Initialize the vectors to store vertex data and indices
     std::vector<GLfloat> vertexData;
     std::vector<GLuint> indices;
 
-    // Load vertex and index data from the .obj file
-    loadObj(path, vertexData, indices);
-
-    // Now that we have vertexData and indices, update the VBO and EBO
-    m_vbo.update(vertexData.size() * sizeof(GLfloat), vertexData.data());
-    m_ebo.update(indices.size() * sizeof(GLuint), indices.data());
-
-    // Initialize and bind the Vertex Array Object (VAO)
     m_vao.bind();
 
-    // Bind the Vertex Buffer Object (VBO) and Element Buffer Object (EBO)
     m_vbo.bind();
     m_ebo.bind();
 
-    // Define the vertex attribute pointer
+    loadObj(path, vertexData, indices);
+
+    m_vbo.allocate(GL_ARRAY_BUFFER, vertexData.size() * sizeof(GLfloat), vertexData.data(), GL_DYNAMIC_DRAW);
+    m_ebo.allocate(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_DYNAMIC_DRAW);
+
 
     m_vao.specifyAttribute(m_vbo, 0, 3, 0, 0);
-
-    // Use a custom method to set the count later
-    m_drawcall.setCount(indices.size());
+    
 }
 
-
-
-void Model::loadObj(const char* path, std::vector<GLfloat>& vertexData, std::vector<GLuint>& indices)
+void Model::loadObj(const char *path, std::vector<GLfloat> &vertexData, std::vector<GLuint> &indices)
 {
     objl::Loader loader;
     bool loadout = loader.LoadFile(path);
@@ -60,5 +50,11 @@ void Model::loadObj(const char* path, std::vector<GLfloat>& vertexData, std::vec
 
 void Model::draw()
 {
+    m_vao.bind();
+
+    m_vbo.bind();
+    m_ebo.bind();
     m_drawcall.draw();
+
+    m_vao.unbind();
 }

@@ -19,4 +19,5 @@ void SceneColoredSquare::run(Window &w)
 {
     m_resources.color.use();
     m_coloredSquareDraw.draw();
+    m_coloredSquareVao.unbind();
 }

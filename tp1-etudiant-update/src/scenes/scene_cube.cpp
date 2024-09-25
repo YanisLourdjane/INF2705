@@ -14,7 +14,6 @@ SceneCube::SceneCube(Resources &res)
       m_cubeVao(),
       m_cubeDraw(m_cubeVao, 36)
 {
-    // TODO
     m_cubeVao.bind();
     m_cubeBuffer.bind();
     m_cubeIndicesBuffer.bind();
@@ -30,11 +29,11 @@ void SceneCube::run(Window &w)
     m_cubeIndicesBuffer.bind();
     float aspectRatio = static_cast<float>(w.getWidth())/static_cast<float>(w.getHeight());
 
-    glm::mat4 mvp = glm::mat4();
+    glm::mat4 mvp = glm::mat4(1.0f);
 
-    glm::mat4 m = glm::rotate(glm::mat4(1.0f), glm::radians(m_rotationAngleDegree), glm::vec3(0.0f, 1.0f, 0.1f));
+    glm::mat4 m = glm::rotate(glm::mat4(1.0f), glm::radians(m_rotationAngleDegree), glm::vec3(0.1f, 1.0f, 0.1f));
     glm::mat4 v = glm::translate(glm::mat4(1.0f), -glm::vec3(0.0f, 0.5f, 2.0f));
-    glm::mat4 p = glm::perspective(70.0f, aspectRatio, 0.1f, 10.0f);
+    glm::mat4 p = glm::perspective(glm::radians(70.0f), aspectRatio, 0.1f, 10.0f);
     
     mvp = p*v*m;
     m_resources.transformColorAttrib.use();

@@ -18,6 +18,6 @@ void SceneColoredTriangle::run(Window& w)
 {
     m_resources.color.use();
     m_coloredTriangleDraw.draw();
-    
+    m_coloredTriangleVao.unbind();
 }
 
