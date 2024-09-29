@@ -12,9 +12,11 @@ Resources::Resources()
     initShaderProgram(basic, "shaders/basic.vs.glsl", "shaders/basic.fs.glsl");
     initShaderProgram(color, "shaders/color.vs.glsl", "shaders/color.fs.glsl");
     initShaderProgram(transformColorAttrib, "shaders/transform.vs.glsl", "shaders/transform.fs.glsl");
-    initShaderProgram(transformSolidColor, "shaders/transform.vs.glsl", "shaders/transform.fs.glsl");
+    initShaderProgram(transformSolidColor, "shaders/model.vs.glsl", "shaders/model.fs.glsl");
 
+    // location cube
     mvpLocationTransformColorAttrib = transformColorAttrib.getUniformLoc("MVP");
+    // location caroussel (inclu couleur)
     mvpLocationTransformSolidColor = transformSolidColor.getUniformLoc("MVP");
     colorLocationTransformSolidColor = transformSolidColor.getUniformLoc("color");
 }

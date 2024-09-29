@@ -9,6 +9,11 @@ DrawArraysCommand::DrawArraysCommand(VertexArrayObject &vao, GLsizei count) : m_
 
 void DrawArraysCommand::draw()
 {
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        std::cout << "Draw begin error: " << error << " at line " << __LINE__ << std::endl;
+    }
     m_vao.bind();
     glDrawArrays(GL_TRIANGLES, 0, m_count);
 }
@@ -26,13 +31,15 @@ DrawElementsCommand::DrawElementsCommand(VertexArrayObject &vao, GLsizei count, 
 
 void DrawElementsCommand::draw()
 {
-    m_vao.bind();
-    glDrawElements(GL_TRIANGLES, m_count, m_type, 0);
     GLenum error = glGetError();
     if (error != GL_NO_ERROR)
     {
         std::cout << "Draw command error: " << error << " at line " << __LINE__ << std::endl;
     }
+    m_vao.bind();
+    glDrawElements(GL_TRIANGLES, m_count, m_type, 0);
+    
+    
 }
 
 void DrawElementsCommand::setCount(GLsizei count)

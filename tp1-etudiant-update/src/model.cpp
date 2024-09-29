@@ -13,18 +13,19 @@ Model::Model(const char *path)
     std::vector<GLfloat> vertexData;
     std::vector<GLuint> indices;
 
-    m_vao.bind();
-
-    m_vbo.bind();
-    m_ebo.bind();
-
     loadObj(path, vertexData, indices);
 
     m_vbo.allocate(GL_ARRAY_BUFFER, vertexData.size() * sizeof(GLfloat), vertexData.data(), GL_DYNAMIC_DRAW);
     m_ebo.allocate(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_DYNAMIC_DRAW);
 
+    m_vao.bind();
 
-    m_vao.specifyAttribute(m_vbo, 0, 3, 0, 0);
+    m_vbo.bind();
+    m_ebo.bind();
+
+    m_vao.specifyAttribute(m_vbo, 0, 3, 3, 0);
+
+    m_drawcall.setCount(indices.size());
     
 }
 

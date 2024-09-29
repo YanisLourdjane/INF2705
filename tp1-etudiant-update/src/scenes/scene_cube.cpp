@@ -4,6 +4,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <iostream>
+
+
 #include "vertices_data.h"
 
 SceneCube::SceneCube(Resources &res)
@@ -30,6 +33,7 @@ void SceneCube::run(Window &w)
     float aspectRatio = static_cast<float>(w.getWidth())/static_cast<float>(w.getHeight());
 
     glm::mat4 mvp = glm::mat4(1.0f);
+    
 
     glm::mat4 m = glm::rotate(glm::mat4(1.0f), glm::radians(m_rotationAngleDegree), glm::vec3(0.1f, 1.0f, 0.1f));
     glm::mat4 v = glm::translate(glm::mat4(1.0f), -glm::vec3(0.0f, 0.5f, 2.0f));
@@ -40,5 +44,6 @@ void SceneCube::run(Window &w)
     glUniformMatrix4fv(m_resources.mvpLocationTransformColorAttrib,  1, GL_FALSE, glm::value_ptr(mvp));
     
     m_cubeDraw.draw();
+
     m_cubeVao.unbind();
 }
