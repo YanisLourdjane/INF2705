@@ -137,7 +137,7 @@ glm::mat4 SceneTransform::getCameraThirdPerson()
 {
     float rayon = 6.0f;
     float azimut = glm::pi<float>() / 2.0f;
-    float polaire = glm::pi<float>() / 2.0f;
+    float polaire = glm::pi<float>() / 2.53545f;
 
     float x = rayon * cos(azimut) * sin(polaire);
     float y = rayon * cos(polaire);
