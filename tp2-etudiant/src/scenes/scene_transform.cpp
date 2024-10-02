@@ -8,9 +8,9 @@
 // TODO - coordonnées de texture
 const GLfloat groundData[] = {
     -10.0f, 0.0f, -10.0f,  0.0f, 0.0f,
-     10.0f, 0.0f, -10.0f,  0.0f, 0.0f,
-    -10.0f, 0.0f,  10.0f,  0.0f, 0.0f,
-     10.0f, 0.0f,  10.0f,  0.0f, 0.0f,
+     10.0f, 0.0f, -10.0f,  3.0f, 0.0f,
+    -10.0f, 0.0f,  10.0f,  0.0f, 3.0f,
+     10.0f, 0.0f,  10.0f,  3.0f, 3.0f,
 };
 
 const GLubyte indexes[] = {
@@ -35,17 +35,52 @@ SceneTransform::SceneTransform(Resources& res, bool& isMouseMotionEnabled, bool&
 
 {
     // TODO - spécifier les attributs
-    
     m_groundVao.bind();
+    m_groundBuffer.bind();
     m_groundIndicesBuffer.bind();
+    m_groundVao.specifyAttribute(m_groundBuffer, 0, 3, 3, 0);
+    m_groundVao.specifyAttribute(m_groundIndicesBuffer, 1, 3, 3, 0);
     m_groundVao.unbind();
     
     // TODO - init des textures
+    glGenTextures(1, &m_groundTexture);
+    glBindTexture(GL_TEXTURE_2D, m_groundTexture);
+
+    //load la texture a partir de son path
+
+    //Repetition horizontale et verticale de la texture
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
+    glGenerateMipmap( GL_TEXTURE_2D );
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
 }
 
 void SceneTransform::run(Window& w)
 {
     // TODO - ajout des textures
+    m_groundVao.bind();
+    m_groundBuffer.bind();
+    m_groundIndicesBuffer.bind();
+
+    glBindTexture(GL_TEXTURE_2D, m_groundBuffer);
+
+    glm::mat4 mvpTerrain = glm::mat4(1.0f);
+    glm::translate(mvp, glm::vec3(0.0f, -0.1f, 0.0f));
+    m_resources.model.use();
+    glUniformMatrix4fv(m_resources.mvpLocationModel,  1, GL_FALSE, glm::value_ptr(mvpTerrain));
+
+    m_groundDraw.draw();
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+    m_groundVao.unbind();
+
+
 
     m_resources.model.use();
     
