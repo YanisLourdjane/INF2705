@@ -15,6 +15,8 @@ Texture2D::Texture2D(const char* path)
         std::cout << "Error loading texture \"" << path << "\": " << stbi_failure_reason() << std::endl;
 
     // TODO - Chargement de la texture
+    glGenTextures(1, &m_id);
+
     GLenum format = GL_RGB;
     if (nChannels == 1)
         format = GL_RED;
@@ -22,8 +24,13 @@ Texture2D::Texture2D(const char* path)
         format = GL_RGB;
     else if (nChannels == 4)
         format = GL_RGBA;
-        
+    
+
+    glBindTexture(GL_TEXTURE_2D, m_id);
     glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     stbi_image_free(data);
 }
@@ -60,5 +67,7 @@ void Texture2D::enableMipmap()
 void Texture2D::use()
 {
     // TODO
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, m_id);
 }
 

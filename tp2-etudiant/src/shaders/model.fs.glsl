@@ -1,9 +1,10 @@
 #version 330 core
 
-uniform vec2 texture;
+uniform sampler2D texture;
 in vec2 texturePos;
+out vec4 outColor;
 
 void main()
 {
-    outColor = vec4(color, 1.0);
+    outColor = texture( texture, texturePos );
 }

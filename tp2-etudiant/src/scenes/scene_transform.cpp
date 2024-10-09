@@ -43,33 +43,27 @@ SceneTransform::SceneTransform(Resources& res, bool& isMouseMotionEnabled, bool&
     m_groundVao.unbind();
     
     // TODO - init des textures
-    glGenTextures(1, &m_groundTexture);
-    glBindTexture(GL_TEXTURE_2D, m_groundTexture);
-
-    //load la texture a partir de son path
 
     //Repetition horizontale et verticale de la texture
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    m_groundTexture.setWrap(GL_REPEAT);
 
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    m_groundTexture.setFiltering(GL_NEAREST_MIPMAP_LINEAR);
 
-    glGenerateMipmap( GL_TEXTURE_2D );
-
-    glBindTexture(GL_TEXTURE_2D, 0);
+    m_groundTexture.enableMipmap();
     
 }
 
 void SceneTransform::run(Window& w)
 {
     // TODO - ajout des textures
-    m_groundVao.bind();
-    m_groundBuffer.bind();
-    m_groundIndicesBuffer.bind();
 
-    glBindTexture(GL_TEXTURE_2D, m_groundBuffer);
+    //Code non necessaire
+    // m_groundVao.bind();
+    // m_groundBuffer.bind();
+    // m_groundIndicesBuffer.bind();
+    // glBindTexture(GL_TEXTURE_2D, m_groundBuffer);
 
+    //ajout de la translation de la matrice du sol
     glm::mat4 mvpTerrain = glm::mat4(1.0f);
     glm::translate(mvp, glm::vec3(0.0f, -0.1f, 0.0f));
     m_resources.model.use();
@@ -80,7 +74,7 @@ void SceneTransform::run(Window& w)
     glBindTexture(GL_TEXTURE_2D, 0);
     m_groundVao.unbind();
 
-
+    /////////////////////
 
     m_resources.model.use();
     
