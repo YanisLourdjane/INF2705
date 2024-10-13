@@ -33,23 +33,41 @@ SceneTransform::SceneTransform(Resources& res, bool& isMouseMotionEnabled, bool&
 , m_groundVao()
 , m_groundDraw(m_groundVao, 6)
 
+, m_carouselFrame("../models/carousel_frame.obj")
+, m_carouselPole("../models/carousel_pole.obj")
+, m_carouselHorse("../models/carousel_horse.obj")
+, m_groundTexture("../textures/grassSeamless.jpg")
+, m_frameTexture("../textures/carousel_frame.jpg")
+, m_poleTexture("../textures/carousel_pole.jpg")
+, m_horseTexture("../textures/carousel_horseAtlas.jpg")
 {
-    // TODO - spécifier les attributs
+    //spécifier les attributs
     m_groundVao.bind();
     m_groundBuffer.bind();
     m_groundIndicesBuffer.bind();
-    m_groundVao.specifyAttribute(m_groundBuffer, 0, 3, 3, 0);
-    m_groundVao.specifyAttribute(m_groundIndicesBuffer, 1, 3, 3, 0);
+    m_groundVao.specifyAttribute(m_groundBuffer, 0, 3, 5, 0);
+    m_groundVao.specifyAttribute(m_groundIndicesBuffer, 1, 2, 5, 3);
     m_groundVao.unbind();
     
-    // TODO - init des textures
+    //init des textures
 
     //Repetition horizontale et verticale de la texture
     m_groundTexture.setWrap(GL_REPEAT);
-
     m_groundTexture.setFiltering(GL_NEAREST_MIPMAP_LINEAR);
-
     m_groundTexture.enableMipmap();
+
+    m_horseTexture.setWrap(GL_CLAMP_TO_EDGE);
+    m_horseTexture.setFiltering(GL_NEAREST);
+    m_horseTexture.enableMipmap();
+
+    m_poleTexture.setWrap(GL_CLAMP_TO_EDGE);
+    m_poleTexture.setFiltering(GL_NEAREST);
+    m_poleTexture.enableMipmap();
+
+    m_frameTexture.setWrap(GL_CLAMP_TO_EDGE);
+    m_frameTexture.setFiltering(GL_NEAREST);
+    m_frameTexture.enableMipmap();
+
     
 }
 
@@ -57,32 +75,23 @@ void SceneTransform::run(Window& w)
 {
     // TODO - ajout des textures
 
-    //Code non necessaire
-    // m_groundVao.bind();
-    // m_groundBuffer.bind();
-    // m_groundIndicesBuffer.bind();
-    // glBindTexture(GL_TEXTURE_2D, m_groundBuffer);
-
     //ajout de la translation de la matrice du sol
     glm::mat4 mvpTerrain = glm::mat4(1.0f);
-    glm::translate(mvp, glm::vec3(0.0f, -0.1f, 0.0f));
-    m_resources.model.use();
-    glUniformMatrix4fv(m_resources.mvpLocationModel,  1, GL_FALSE, glm::value_ptr(mvpTerrain));
+    glm::translate(mvpTerrain, glm::vec3(0.0f, -0.1f, 0.0f));
+    glUniformMatrix4fv(m_resources.mvpLocationModel,  1, GL_FALSE, &mvpTerrain[0][0]);
 
-    m_groundDraw.draw();
-
-    glBindTexture(GL_TEXTURE_2D, 0);
-    m_groundVao.unbind();
 
     /////////////////////
 
     m_resources.model.use();
+    //set the uniform sampler2D in th Shader Fragment
+    glUniform1i(m_resources.model.getUniformLoc("texture"), 0);
     
     updateInput(w);
 
     glm::mat4 model, proj, view, mvp;
     
-    const float SCREEN_SIZE_ORTHO = 5.0f;
+    //const float SCREEN_SIZE_ORTHO = 5.0f;
     
     proj = getProjectionMatrix(w);
     
@@ -96,6 +105,8 @@ void SceneTransform::run(Window& w)
     model = computeCarouselFrameModelMatrix();
     mvp = projView * model;
     glUniformMatrix4fv(m_resources.mvpLocationModel, 1, GL_FALSE, &mvp[0][0]);
+    
+    m_frameTexture.use();
     m_carouselFrame.draw();
     
     const int N_HORSES = 5;
@@ -103,10 +114,14 @@ void SceneTransform::run(Window& w)
     {
         mvp = projView * computeCarouselPoleModelMatrix(i);
         glUniformMatrix4fv(m_resources.mvpLocationModel, 1, GL_FALSE, &mvp[0][0]);
+        m_poleTexture.use();
         m_carouselPole.draw();
         
-        mvp = mvp * computeCarouselHorseModelMatrix(i);
+        //mvp = mvp * computeCarouselHorseModelMatrix(i);
         glUniformMatrix4fv(m_resources.mvpLocationModel, 1, GL_FALSE, &mvp[0][0]);
+        //glUniform1i(m_resources.horse,i);
+        //glUniformMatrix4fv(m_)
+        m_horseTexture.use();
         m_carouselHorse.draw();
     }
     
@@ -114,6 +129,11 @@ void SceneTransform::run(Window& w)
     
     
     // TODO - dessin du sol
+    m_groundTexture.use();
+    m_groundDraw.draw();
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+    m_groundVao.unbind();
     
 }
 

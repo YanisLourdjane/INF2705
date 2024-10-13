@@ -12,7 +12,7 @@ void main()
     fracCol = modf(index, &columns);
 
     float rows;
-    fracRow = modf(index, &rows);
+    fracRow = modf(index, rows);
 
     gl_Position = MVP * vec4(inPos, 1.0);
     texturePos = inTexturePos;

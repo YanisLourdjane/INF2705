@@ -17,7 +17,6 @@ Resources::Resources()
     // TODO: location caroussel (inclu couleur)
     mvpLocationHorse = horse.getUniformLoc("");
     textureIndexLocationHorse = horse.getUniformLoc("");
-
 }
 
 void Resources::initShaderProgram(ShaderProgram &program, const char *vertexSrcPath, const char *fragmentSrcPath)
