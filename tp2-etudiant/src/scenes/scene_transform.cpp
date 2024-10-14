@@ -54,31 +54,21 @@ SceneTransform::SceneTransform(Resources& res, bool& isMouseMotionEnabled, bool&
 
     //Repetition horizontale et verticale de la texture
     m_groundTexture.setWrap(GL_REPEAT);
-    m_groundTexture.setFiltering(GL_NEAREST_MIPMAP_LINEAR);
     m_groundTexture.enableMipmap();
 
     m_frameTexture.setWrap(GL_CLAMP_TO_EDGE);
-    m_frameTexture.setFiltering(GL_NEAREST);
-    m_frameTexture.enableMipmap();
+    m_frameTexture.setFiltering(GL_LINEAR);
 
     m_poleTexture.setWrap(GL_CLAMP_TO_EDGE);
-    m_poleTexture.setFiltering(GL_NEAREST);
-    m_poleTexture.enableMipmap();
+    m_poleTexture.setFiltering(GL_LINEAR);
 
     m_horseTexture.setWrap(GL_CLAMP_TO_EDGE);
     m_horseTexture.setFiltering(GL_NEAREST);
-    m_horseTexture.enableMipmap();
-
-    
 }
 
 void SceneTransform::run(Window& w)
 {
     // TODO - ajout des textures
-
-    
-
-
     /////////////////////
 
     m_resources.model.use();
@@ -89,8 +79,7 @@ void SceneTransform::run(Window& w)
 
     glm::mat4 model, proj, view, mvp;
     
-    //const float SCREEN_SIZE_ORTHO = 5.0f;
-    
+        
     proj = getProjectionMatrix(w);
     
     if (m_isThirdPerson)
@@ -106,6 +95,10 @@ void SceneTransform::run(Window& w)
     
     m_frameTexture.use();
     m_carouselFrame.draw();
+
+    m_resources.horse.use();
+    glUniform1i(m_resources.model.getUniformLoc("myTexture"), 0);
+
     
     const int N_HORSES = 5;
     for (int i = 0; i < N_HORSES; i++)
@@ -114,8 +107,6 @@ void SceneTransform::run(Window& w)
         glUniformMatrix4fv(m_resources.mvpLocationModel, 1, GL_FALSE, &mvp[0][0]);
         m_poleTexture.use();
         m_carouselPole.draw();
-        
-        
         
         mvp = mvp * computeCarouselHorseModelMatrix(i);
         glUniformMatrix4fv(m_resources.mvpLocationModel, 1, GL_FALSE, &mvp[0][0]);
@@ -127,13 +118,10 @@ void SceneTransform::run(Window& w)
     m_carouselAngleRad -= 0.01f;
     
     
-    
-
-    //ajout de la translation de la matrice du sol
-    glm::mat4 mvpTerrain = glm::mat4(1.0f);
-    glm::translate(mvpTerrain, glm::vec3(0.0f, -0.1f, 0.0f));
-    mvpTerrain = projView * mvpTerrain;
-    glUniformMatrix4fv(m_resources.mvpLocationModel,  1, GL_FALSE, &mvpTerrain[0][0]);
+    m_resources.model.use();
+    glm::mat4 groundModel = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -0.1f, 0.0f));
+    groundModel = projView * groundModel;
+    glUniformMatrix4fv(m_resources.mvpLocationModel, 1, GL_FALSE, &groundModel[0][0]);
     m_groundTexture.use();
     m_groundDraw.draw();
 

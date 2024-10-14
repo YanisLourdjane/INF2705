@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
         
     printGLInfo();
     
-    //corrector(w);
+    corrector(w);
     
     bool isMouseMotionEnabled = false;    
     bool isThirdPerson = false;

@@ -58,6 +58,8 @@ void Texture2D::enableMipmap()
 {
     // TODO - mipmap et filtering correspondant
     glBindTexture(GL_TEXTURE_2D, m_id);
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glGenerateMipmap( GL_TEXTURE_2D );
 }
 

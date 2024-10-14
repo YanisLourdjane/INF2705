@@ -6,5 +6,11 @@ out vec4 outColor;
 
 void main()
 {
-    outColor = texture( myTexture, texturePos );
+     vec4 color = texture( myTexture, texturePos );
+
+    if (color.a < 0.3) {
+        discard;
+    }
+
+    outColor = color;
 }
