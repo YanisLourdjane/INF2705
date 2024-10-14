@@ -10,13 +10,12 @@ Resources::Resources()
 {
     // TODO - init des shaders
     initShaderProgram(model, "shaders/model.vs.glsl", "shaders/model.fs.glsl");
-    initShaderProgram(horse, "shaders/horse.vs.glsl", "shaders/horse.fs.glsl");
+    initShaderProgram(horse, "shaders/horse.vs.glsl", "shaders/model.fs.glsl");
 
-    // location cube
     mvpLocationModel = model.getUniformLoc("MVP");
-    // TODO: location caroussel (inclu couleur)
-    mvpLocationHorse = horse.getUniformLoc("");
-    textureIndexLocationHorse = horse.getUniformLoc("");
+    
+    mvpLocationHorse = horse.getUniformLoc("MVP");
+    textureIndexLocationHorse = horse.getUniformLoc("index");
 }
 
 void Resources::initShaderProgram(ShaderProgram &program, const char *vertexSrcPath, const char *fragmentSrcPath)

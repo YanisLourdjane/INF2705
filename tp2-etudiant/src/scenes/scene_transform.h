@@ -25,7 +25,7 @@ private:
     glm::mat4 getProjectionMatrix(Window& w);
     glm::mat4 computeCarouselFrameModelMatrix();
     glm::mat4 computeCarouselPoleModelMatrix(int i);
-    glm::mat4 computeCarouselHorseModelMatrix();
+    glm::mat4 computeCarouselHorseModelMatrix(int i);
     
 private:
     bool& m_isMouseMotionEnabled;

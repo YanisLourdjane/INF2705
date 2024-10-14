@@ -25,11 +25,11 @@ SceneStencil::SceneStencil(Resources& res)
 , m_squareIndicesBuffer(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexes), indexes, GL_STATIC_DRAW)
 , m_squareVao()
 , m_squareDraw(m_squareVao, 6)
-, m_playerTexture("../textures/player.jpg")
-, m_playerHiddenTexture("../textures/player_hidden.jpg")
-, m_enemyTexture("../textures/enemy.jpg")
-, m_cloudTexture("../textures/cloud.jpg")
-, m_bushTexture("../textures/bush.jpg")
+, m_playerTexture("../textures/player.png")
+, m_playerHiddenTexture("../textures/player_hidden.png")
+, m_enemyTexture("../textures/enemy.png")
+, m_cloudTexture("../textures/cloud.png")
+, m_bushTexture("../textures/bush.png")
 {
     // TODO - specification des attributs
     
