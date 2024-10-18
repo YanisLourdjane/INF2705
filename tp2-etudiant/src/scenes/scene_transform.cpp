@@ -42,7 +42,6 @@ SceneTransform::SceneTransform(Resources& res, bool& isMouseMotionEnabled, bool&
 , m_poleTexture("../textures/carousel_pole.png")
 , m_horseTexture("../textures/carousel_horsesAtlas.png")
 {
-    //spécifier les attributs
     m_groundVao.bind();
     m_groundBuffer.bind();
     m_groundIndicesBuffer.bind();
@@ -50,9 +49,7 @@ SceneTransform::SceneTransform(Resources& res, bool& isMouseMotionEnabled, bool&
     m_groundVao.specifyAttribute(m_groundBuffer, 1, 2, 5, 3);
     m_groundVao.unbind();
     
-    //init des textures
 
-    //Repetition horizontale et verticale de la texture
     m_groundTexture.setWrap(GL_REPEAT);
     m_groundTexture.enableMipmap();
 
@@ -68,11 +65,8 @@ SceneTransform::SceneTransform(Resources& res, bool& isMouseMotionEnabled, bool&
 
 void SceneTransform::run(Window& w)
 {
-    // TODO - ajout des textures
-    /////////////////////
-
     m_resources.model.use();
-    //set the uniform sampler2D in th Shader Fragment
+    
     glUniform1i(m_resources.model.getUniformLoc("myTexture"), 0);
     
     updateInput(w);

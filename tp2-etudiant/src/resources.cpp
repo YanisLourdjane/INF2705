@@ -8,7 +8,6 @@
 
 Resources::Resources()
 {
-    // TODO - init des shaders
     initShaderProgram(model, "shaders/model.vs.glsl", "shaders/model.fs.glsl");
     initShaderProgram(horse, "shaders/horse.vs.glsl", "shaders/model.fs.glsl");
 
