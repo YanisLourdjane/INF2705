@@ -7,40 +7,43 @@
 
 // TODO - coordonnées de texture
 const GLfloat groundData[] = {
-    -10.0f, 0.0f, -10.0f,  0.0f, 0.0f,
-     10.0f, 0.0f, -10.0f,  3.0f, 0.0f,
-    -10.0f, 0.0f,  10.0f,  0.0f, 3.0f,
-     10.0f, 0.0f,  10.0f,  3.0f, 3.0f,
+    -10.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    10.0f,
+    0.0f,
+    -10.0f,
+    3.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    10.0f,
+    0.0f,
+    3.0f,
+    10.0f,
+    0.0f,
+    10.0f,
+    3.0f,
+    3.0f,
 };
 
 const GLubyte indexes[] = {
     2, 3, 0,
-    3, 1, 0
-};
+    3, 1, 0};
 
+SceneTransform::SceneTransform(Resources &res, bool &isMouseMotionEnabled, bool &isThirdPerson, bool &isOrtho)
+    : Scene(res), m_isMouseMotionEnabled(isMouseMotionEnabled), m_isThirdPerson(isThirdPerson), m_isOrtho(isOrtho), m_cameraPosition(0.0f, 1.0f, 5.0f), m_cameraOrientation(0.0f, 0.0f), m_carouselAngleRad(0.0f)
 
-SceneTransform::SceneTransform(Resources& res, bool& isMouseMotionEnabled, bool& isThirdPerson, bool& isOrtho)
-: Scene(res)
-, m_isMouseMotionEnabled(isMouseMotionEnabled)
-, m_isThirdPerson(isThirdPerson)
-, m_isOrtho(isOrtho)
-, m_cameraPosition(0.0f, 1.0f, 5.0f)
-, m_cameraOrientation(0.0f, 0.0f)
-, m_carouselAngleRad(0.0f)
+      ,
+      m_groundBuffer(GL_ARRAY_BUFFER, sizeof(groundData), groundData, GL_STATIC_DRAW), m_groundIndicesBuffer(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexes), indexes, GL_STATIC_DRAW), m_groundVao(), m_groundDraw(m_groundVao, 6)
 
-, m_groundBuffer(GL_ARRAY_BUFFER, sizeof(groundData), groundData, GL_STATIC_DRAW)
-, m_groundIndicesBuffer(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexes), indexes, GL_STATIC_DRAW)
-, m_groundVao()
-, m_groundDraw(m_groundVao, 6)
+      ,
+      m_carouselFrame("../models/carousel_frame.obj"), m_carouselPole("../models/carousel_pole.obj"), m_carouselHorse("../models/carousel_horse.obj")
 
-, m_carouselFrame("../models/carousel_frame.obj")
-, m_carouselPole("../models/carousel_pole.obj")
-, m_carouselHorse("../models/carousel_horse.obj")
-
-, m_groundTexture("../textures/grassSeamless.jpg")
-, m_frameTexture("../textures/carousel_frame.png")
-, m_poleTexture("../textures/carousel_pole.png")
-, m_horseTexture("../textures/carousel_horsesAtlas.png")
+      ,
+      m_groundTexture("../textures/grassSeamless.jpg"), m_frameTexture("../textures/carousel_frame.png"), m_poleTexture("../textures/carousel_pole.png"), m_horseTexture("../textures/carousel_horsesAtlas.png")
 {
     m_groundVao.bind();
     m_groundBuffer.bind();
@@ -48,7 +51,6 @@ SceneTransform::SceneTransform(Resources& res, bool& isMouseMotionEnabled, bool&
     m_groundVao.specifyAttribute(m_groundBuffer, 0, 3, 5, 0);
     m_groundVao.specifyAttribute(m_groundBuffer, 1, 2, 5, 3);
     m_groundVao.unbind();
-    
 
     m_groundTexture.setWrap(GL_REPEAT);
     m_groundTexture.enableMipmap();
@@ -63,55 +65,75 @@ SceneTransform::SceneTransform(Resources& res, bool& isMouseMotionEnabled, bool&
     m_horseTexture.setFiltering(GL_NEAREST);
 }
 
-void SceneTransform::run(Window& w)
+void SceneTransform::run(Window &w)
 {
     m_resources.model.use();
-    
+
     glUniform1i(m_resources.model.getUniformLoc("myTexture"), 0);
-    
+
     updateInput(w);
 
     glm::mat4 model, proj, view, mvp;
-    
-        
+
     proj = getProjectionMatrix(w);
-    
+
     if (m_isThirdPerson)
         view = getCameraThirdPerson();
     else
         view = getCameraFirstPerson();
-    
+
     glm::mat4 projView = proj * view;
 
     model = computeCarouselFrameModelMatrix();
     mvp = projView * model;
     glUniformMatrix4fv(m_resources.mvpLocationModel, 1, GL_FALSE, &mvp[0][0]);
-    
+
     m_frameTexture.use();
     m_carouselFrame.draw();
 
-    m_resources.horse.use();
-    glUniform1i(m_resources.model.getUniformLoc("myTexture"), 0);
-
-    
     const int N_HORSES = 5;
+
+    glm::mat4 poleMatrices[N_HORSES];
+    glm::mat4 horseMatrices[N_HORSES];
+
     for (int i = 0; i < N_HORSES; i++)
     {
-        mvp = projView * computeCarouselPoleModelMatrix(i);
-        glUniformMatrix4fv(m_resources.mvpLocationModel, 1, GL_FALSE, &mvp[0][0]);
-        m_poleTexture.use();
+        poleMatrices[i] = projView * computeCarouselPoleModelMatrix(i);
+        horseMatrices[i] = poleMatrices[i] * computeCarouselHorseModelMatrix(i);
+    }
+
+
+    m_poleTexture.use();
+    for(int i = 0; i < N_HORSES; i++)
+    {
+        glUniformMatrix4fv(m_resources.mvpLocationModel, 1, GL_FALSE, &poleMatrices[i][0][0]);
         m_carouselPole.draw();
-        
-        mvp = mvp * computeCarouselHorseModelMatrix(i);
-        glUniformMatrix4fv(m_resources.mvpLocationModel, 1, GL_FALSE, &mvp[0][0]);
+    }
+
+    m_resources.horse.use();
+    m_horseTexture.use();
+    for(int i = 0; i < N_HORSES; i++)
+    {
+        glUniformMatrix4fv(m_resources.mvpLocationModel, 1, GL_FALSE, &horseMatrices[i][0][0]);
         glUniform1i(m_resources.textureIndexLocationHorse, i);
-        m_horseTexture.use();
         m_carouselHorse.draw();
     }
-    
+
+    // const int N_HORSES = 5;
+    // for (int i = 0; i < N_HORSES; i++)
+    // {
+    //     mvp = projView * computeCarouselPoleModelMatrix(i);
+    //     glUniformMatrix4fv(m_resources.mvpLocationModel, 1, GL_FALSE, &mvp[0][0]);
+    //     m_carouselPole.draw();
+
+    //     mvp = mvp * computeCarouselHorseModelMatrix(i);
+    //     glUniformMatrix4fv(m_resources.mvpLocationModel, 1, GL_FALSE, &mvp[0][0]);
+    //     glUniform1i(m_resources.textureIndexLocationHorse, i);
+    //     m_carouselHorse.draw();
+    // }
+
     m_carouselAngleRad -= 0.01f;
-    
-    
+
     m_resources.model.use();
     glm::mat4 groundModel = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -0.1f, 0.0f));
     groundModel = projView * groundModel;
@@ -123,7 +145,7 @@ void SceneTransform::run(Window& w)
     m_groundVao.unbind();
 }
 
-void SceneTransform::updateInput(Window& w)
+void SceneTransform::updateInput(Window &w)
 {
     int x = 0, y = 0;
     if (m_isMouseMotionEnabled)
@@ -141,7 +163,7 @@ void SceneTransform::updateInput(Window& w)
         positionOffset.x -= SPEED;
     if (w.getKeyHold(Window::Key::D))
         positionOffset.x += SPEED;
-        
+
     if (w.getKeyHold(Window::Key::Q))
         positionOffset.y -= SPEED;
     if (w.getKeyHold(Window::Key::E))
@@ -150,5 +172,3 @@ void SceneTransform::updateInput(Window& w)
     positionOffset = glm::rotate(glm::mat4(1.0f), m_cameraOrientation.y, glm::vec3(0.0, 1.0, 0.0)) * glm::vec4(positionOffset, 1);
     m_cameraPosition += positionOffset;
 }
-
-
